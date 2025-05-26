@@ -10,13 +10,14 @@ class EmailService {
                 secure: false,
                 auth: {
                     user: smtpConfig.smtpUser,
-                    password: smtpConfig.smtpPassword
-                }
+                    pass: smtpConfig.smtpPassword
+                },
+
             });
 
-            console.log('smtp host: ', smtpConfig.smtpHost, "password: ", smtpConfig.smtpPassword, ' port: ', smtpConfig.smtpPort,
-                ' smtpUser: ', smtpConfig.smtpUser
-            );
+            // console.log('smtp host: ', smtpConfig.smtpHost, "password: ", smtpConfig.smtpPassword, ' port: ', smtpConfig.smtpPort,
+            //     ' smtpUser: ', smtpConfig.smtpUser
+            // );
         } catch (exception) {
             throw {
                 message: 'SMTP connection error',
@@ -25,11 +26,11 @@ class EmailService {
         }
     }
 
-    sendMail = async ({ from, to, subject, html, cc = null, atachments = null }) => {
-        console.log('inside sendMail');
+    sendMail = async ({ to, subject, html, cc = null, atachments = null }) => {
+        // console.log('to: ', to);
         try {
             const messageBody = {
-                from: from,
+                from: smtpConfig.smtpFrom,
                 to: to,
                 subject: subject,
                 html: html
@@ -41,7 +42,7 @@ class EmailService {
                 messageBody.atachments = atachments;
             }
             const response = await this.#transporter.sendMail(messageBody);
-            console.log('response from email service: ', response);
+            // console.log('response from email service: ', response);
         } catch (exception) {
             throw {
                 message: 'Error sending mail',

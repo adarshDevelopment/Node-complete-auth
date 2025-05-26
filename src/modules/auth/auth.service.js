@@ -39,10 +39,8 @@ class AuthService extends BaseService {
     }
 
     sendActivationEmail = async (user) => {
-        console.log('insdie send activation email');
         try {
             await emailSvc.sendMail({
-                from: smtpConfig.smtpFrom,
                 to: user.email,
                 subject: 'Account activation',
                 html: ` <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 30px; color: #333;">
@@ -53,7 +51,7 @@ class AuthService extends BaseService {
                             <p style="font-size: 16px; line-height: 1.6;">
                                 Please activate your account by clicking the button below.
                             </p>
-                            <a href="${appConfig}activate-user/${user.activationToken}" 
+                            <a href="http://${appConfig.frontendUrl}activate-user/${user.activationToken}" 
                                 style="display: inline-block; margin-top: 20px; padding: 12px 25px; font-size: 16px; color: #fff; background-color: #007BFF; text-decoration: none; border-radius: 5px;">
                                 Activate Account
                             </a>
@@ -61,7 +59,7 @@ class AuthService extends BaseService {
                                 If the button doesn't work, copy and paste the following link into your browser:
                             </p>
                             <p style="word-break: break-all; font-size: 14px; color: #007BFF;">
-                                ${appConfig}activate-user/${user.activationToken}
+                                ${appConfig.frontendUrl}activate-user/${user.activationToken}
                             </p>
                             </td>
                         </tr>
@@ -74,8 +72,12 @@ class AuthService extends BaseService {
         }
     }
 
-    sendActivationEmail = () => {
-
+    findSingleRowByFilter = async (filter) => {
+        try {
+            return await this.model.findOne({ where: filter });
+        } catch (exception) {
+            throw exception;
+        }
     }
 }
 

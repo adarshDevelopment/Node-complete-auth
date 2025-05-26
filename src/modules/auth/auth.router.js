@@ -5,4 +5,10 @@ const { RegisterUserDTO } = require('./auth.validator');
 
 
 router.post('/register', bodyValidator(RegisterUserDTO), authController.register);
+router.get('/activate-user/:token', authController.activateUser);
+
+// login
+// auth table masked Access token, maskedRefreshToken, accessToken, refreshToken,
+
+// forgetpassword token along with expiry on the token
 module.exports = router;
