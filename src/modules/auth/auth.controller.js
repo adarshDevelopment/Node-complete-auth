@@ -56,6 +56,37 @@ class AuthController {
             next(exception);
         }
 
+        login = async (req, res, next) => {
+            try {
+                // validate credentials
+
+                // check auth table if user already logged in
+
+                // generate accessToken and refresh Token 
+
+                // mask tokens and send user masked access and refresh tokens
+            } catch (exception) {
+                next(exception);
+            }
+        }
+
+        logout = async (req, res, next) => {
+            try {
+
+            } catch (excetpion) {
+
+            }
+        }
+
+        forgetPassword = async (req, res, next) => {
+            try {
+
+            } catch (excetpion) {
+
+            }
+        }
+
+
     }
 }
 

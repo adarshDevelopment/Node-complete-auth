@@ -1,5 +1,5 @@
 const BaseClass = require('../../services/base.service');
-const models = require('../../../models/index');
+const UserModel = require('./user.model');
 
 class UserService extends BaseClass {
 
@@ -12,4 +12,4 @@ class UserService extends BaseClass {
 }
 
 
-module.exports = new UserService(models.User);
+module.exports = new UserService(UserModel);

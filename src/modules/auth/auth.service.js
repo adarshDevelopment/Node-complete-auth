@@ -1,10 +1,10 @@
 const { Status } = require('../../config/constants.config')
-const models = require('../../../models/index');
+// const models = require('../../../models/index');
 const BaseService = require('../../services/base.service');
 const emailSvc = require('../../services/email.service');
 const { smtpConfig, appConfig } = require('../../config/config')
 const { randomStringGenerator } = require('../../utils/helper');
-
+const UserModel = require('../user/user.model');
 
 class AuthService extends BaseService {
     constructor(model) {
@@ -81,4 +81,4 @@ class AuthService extends BaseService {
     }
 }
 
-module.exports = new AuthService(models.User);
+module.exports = new AuthService(UserModel);
