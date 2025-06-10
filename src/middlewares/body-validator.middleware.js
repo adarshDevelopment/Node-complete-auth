@@ -5,11 +5,11 @@ const requestValidator = (schema) => {
         try {
             const data = req.body;
             if (!data) {
-                throw {
+                next({
                     message: "Empty payload",
                     status: "EMPTY_PAYLOAD",
                     code: 422,
-                }
+                })
             }
             await schema.validateAsync(data, { abortEarly: false })
             next();

@@ -8,7 +8,9 @@ class UserService extends BaseClass {
         email: user.email,
         status: user.status,
         iamge: user.image,
-    })
+        role: user.role
+    });
+
 }
 
 

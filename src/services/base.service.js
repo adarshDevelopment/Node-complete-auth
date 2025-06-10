@@ -20,6 +20,15 @@ class BaseService {
             throw exception;
         }
     }
+
+    findSingleRowByFilter = async (filter) => {
+        try {
+            return await this.model.findOne(filter);
+        } catch (exception) {
+            console.log('exception: ', exception);
+            throw exception;
+        }
+    }
 }
 
 module.exports = BaseService;

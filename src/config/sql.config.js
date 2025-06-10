@@ -10,8 +10,10 @@ const sequelize = new Sequelize(sqlConfig.db, sqlConfig.user, sqlConfig.password
     try {
         await sequelize.authenticate();
     } catch (exception) {
-        throw exception;
+        // throw exception;
+        // console.log(exception);
     }
 })();
+
 
 module.exports = sequelize;

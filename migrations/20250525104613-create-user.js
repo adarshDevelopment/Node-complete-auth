@@ -33,6 +33,11 @@ module.exports = {
         defaultValue: 'inactive',
         allowNull: false
       },
+      role: {
+        type: Sequelize.STRING,
+        defaultValue: 'user',
+        allowNull: false
+      },
       image: {
         type: Sequelize.STRING,
         allowNull: true

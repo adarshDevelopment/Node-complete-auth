@@ -16,13 +16,16 @@ sqlConfig = {
     dialect: process.env.SQL_DIALECT,
     host: process.env.SQL_HOST,
     user: process.env.SQL_USER,
-    password: process.env.SQL_PASSWORD,
+    password: process.env.SQL_PASSWORD || null,
     db: process.env.SQL_DB,
     port: process.env.SQL_PORT
 }
 
+jwtSecret = process.env.JWT_SECRET;
+
 module.exports = {
     smtpConfig,
     appConfig,
-    sqlConfig
+    sqlConfig,
+    jwtSecret
 }
