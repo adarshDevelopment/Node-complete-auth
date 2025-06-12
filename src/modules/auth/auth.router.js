@@ -15,6 +15,8 @@ router.post('/logout', auth(), authController.logout);
 router.post('/forget-password', bodyValidator(ForgetPasswordDTO), authController.forgetPassword);
 
 router.put('/reset-password', bodyValidator(ResetPasswordDTO), authController.resetPassword)
+
+router.post('/refresh-token', authController.refreshToken);
 // login
 // auth table masked Access token, maskedRefreshToken, accessToken, refreshToken,
 

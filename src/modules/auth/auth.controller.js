@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const AuthModel = require('../auth/auth.model');
 const { randomStringGenerator } = require('../../utils/helper');
 const jwt = require('jsonwebtoken');
-const { jwtSecret } = require('../../config/config');
+const { jwtSecret, appConfig } = require('../../config/config');
 
 class AuthController {
     register = async (req, res, next) => {
@@ -114,14 +114,14 @@ class AuthController {
             const maskedRefreshToken = randomStringGenerator(150);
 
             const authPayload = { userId: user.id, accessToken, refreshToken, maskedAccessToken, maskedRefreshToken };
-            console.log('auth payload: ', authPayload);
+            // console.log('auth payload: ', authPayload);
             const auth = await AuthModel.create(authPayload);
 
             // mask tokens and send user masked access and refresh tokens
             res.json({
                 message: 'User successfully logged in',
                 status: 'USER_LOGGED_IN',
-                data: { accessToken: maskedAccessToken, refreshToken: refreshToken },
+                data: { accessToken: maskedAccessToken, refreshToken: maskedRefreshToken },
                 options: null
             });
         } catch (exception) {
@@ -241,8 +241,81 @@ class AuthController {
     refreshToken = async (req, res, next) => {
         try {
 
-        } catch (excetpion) {
+            const authHeader = req.headers.authorization;
 
+            if (!authHeader) {
+                throw {
+                    message: 'Refresh Token not provided',
+                    stauts: 'TOKEN_NOT_PROVIDED',
+                    code: 422
+                }
+            }
+            const token = authHeader.split(' ')[1];
+            console.log('token: ', token);
+
+            // find corresponding refresh token
+            let authObj = await authSvc.findSingleAuthRowByFilter({
+                where: {
+                    maskedRefreshToken: token
+                }
+            });
+
+            if (!authObj) {
+                throw {
+                    message: 'Invalid token. Refresh token not found',
+                    status: 'INVALID_TOKEN',
+                    code: 422
+                }
+            }
+            const payload = jwt.verify(authObj.refreshToken, jwtSecret);
+
+            const user = userSvc.findByPk(payload.userId);
+
+            if (!user) {
+                throw {
+                    message: 'User not found',
+                    status: "USER_NOT_FOUND",
+                    code: 422
+                }
+            }
+            // generate new tokens
+            const accessToken = jwt.sign({
+                userId: user.id,
+                type: 'Bearer'
+            }, jwtSecret, {
+                expiresIn: '1h'
+            });
+
+            const refreshToken = jwt.sign({
+                userId: user.id,
+                type: 'refresh'
+            }, jwtSecret, {
+                expiresIn: '24h'
+            });
+
+            const maskedAccessToken = randomStringGenerator(150);
+            const maskedRefreshToken = randomStringGenerator(150);
+
+            authObj.accessToken = accessToken;
+            authObj.refreshToken = refreshToken;
+            authObj.maskedAccessToken = maskedAccessToken;
+            authObj.maskedRefreshToken = maskedRefreshToken;
+
+            await authObj.save();
+
+            res.json({
+                message: 'Access token generated',
+                statu: 'SUCCESS',
+                data: {
+                    accessToken: authObj.maskedAccessToken,
+                    refreshToken: authObj.maskedRefreshToken
+                },
+                options: null
+            });
+
+
+        } catch (exception) {
+            next(exception);
         }
     }
 }

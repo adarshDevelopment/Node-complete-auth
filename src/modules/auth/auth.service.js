@@ -159,6 +159,14 @@ class AuthService extends BaseService {
         }
     }
 
+    findSingleAuthRowByFilter = async (filter) => {
+        try {
+            return await AuthModel.findOne(filter);
+        } catch (exception) {
+            throw exception;
+        }
+    }
+
 }
 
 module.exports = new AuthService(UserModel);
